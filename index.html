@@ -40,10 +40,10 @@ body{color:var(--foam);font-family:var(--body);font-size:16px;line-height:1.68;-
 #stars{position:fixed;inset:0;z-index:0;pointer-events:none}
 .frame{position:relative;z-index:1;display:flex;max-width:1240px;margin:0 auto}
 
-/* ---------- route-line sidebar ---------- */
-nav.route{position:sticky;top:0;align-self:flex-start;height:100vh;width:250px;flex:0 0 250px;padding:44px 24px 44px 32px;overflow-y:auto;scrollbar-width:none}
 .xlink-brief{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--foam-dim);border:1px solid var(--edge);border-radius:6px;padding:8px 12px;margin:0 0 22px;text-decoration:none;transition:color .2s,border-color .2s;white-space:nowrap}
 .xlink-brief:hover{color:var(--foam);border-color:var(--lume)}
+/* ---------- route-line sidebar ---------- */
+nav.route{position:sticky;top:0;align-self:flex-start;height:100vh;width:250px;flex:0 0 250px;padding:44px 24px 44px 32px;overflow-y:auto;scrollbar-width:none}
 nav.route::-webkit-scrollbar{display:none}
 .brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.26em;color:var(--lume)}
 .brand small{display:block;font-family:var(--mono);font-weight:400;font-size:9.5px;letter-spacing:.18em;color:var(--foam-dim);margin-top:8px}
@@ -124,6 +124,23 @@ ol.refs a{font-family:var(--mono);font-size:11px;word-break:break-all;color:var(
 ol.refs a:hover{text-decoration:underline}
 
 footer{padding:44px 0 0;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em}
+
+
+/* ---------- version chronicle ---------- */
+.era{margin:34px 0 8px}
+.era-head{display:flex;align-items:center;gap:16px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--edge-strong)}
+.era-num{font-family:var(--display);font-weight:700;font-size:22px;color:var(--amber);letter-spacing:.02em}
+.era-head b{font-family:var(--display);font-weight:500;font-size:14px;display:block;letter-spacing:.03em}
+.era-head small{font-family:var(--mono);font-size:11px;color:var(--foam-dim);display:block;margin-top:4px;letter-spacing:.04em}
+.patch{background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--surface);border-radius:8px;padding:16px 20px;margin-bottom:10px}
+.patch:hover{border-left-color:var(--lume)}
+.p-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:10px}
+.p-ver{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--amber)}
+.p-title{font-family:var(--display);font-weight:500;font-size:13px;letter-spacing:.02em}
+.p-date{font-family:var(--mono);font-size:11px;color:var(--foam-dim);margin-left:auto}
+.patch p{font-size:14px;margin-bottom:7px;color:var(--foam)}
+.patch p:last-child{margin-bottom:0}
+.patch b{color:var(--lume);font-weight:600}
 
 .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
 .reveal.in{opacity:1;transform:none}
@@ -240,23 +257,173 @@ footer{padding:44px 0 0;font-family:var(--mono);font-size:11px;color:var(--faint
 
 <section id="s4" class="reveal">
 <div class="sec-tag">04 / LIVE OPERATIONS &amp; VERSION REVIEW</div>
-<h2>The 3.x → 4.x turn</h2>
-<p>The 3.x Amphoreus cycle (Jan 2025 – early 2026) delivered the most ambitious story arc but accumulated friction: exposition-heavy writing, complex puzzles, hard endgame tuning, continuous powercreep discourse. Early-2026 press openly called 3.x a "disappointing" phase. The mid-cycle Developer Radio response partially recovered sentiment.</p>
+<h2>Full version chronicle — 1.0 to 4.4</h2>
+<p>Twenty-nine patches across four story eras, on a six-week cadence that has never publicly slipped. New five-star releases are listed per patch; reception notes reflect documented community and press response at the time.</p>
 
-<h3>Version 4.0 · "No Aha at Full Moon" · Feb 13 2026</h3>
-<p><strong>Shipped:</strong> Planarcadia plus the Astropolis split-world structure, the Path of Elation with Sparxie and Yao Guang, level cap 110, Currency Wars expanded difficulty, the Phantasmoon Games festival structure, fewer traditional events replaced with minigames, and a Fortnite creator-ecosystem tie-in for discovery.</p>
-<p><strong>Did it hit its goals?</strong> The reveal landed poorly — players worried about the event reduction and the missing signature trailer. Post-launch, reception flipped: coverage praised the lighthearted tone after Amphoreus, the generosity, and the time-respect. As an operational case, 4.0 is a successful risk: it changed the version formula and recovered from a bad reveal through the product itself. <strong>New issues:</strong> the two-world structure and minigame-heavy design remain divisive for combat-focused players.</p>
+<div class="era"><div class="era-head"><span class="era-num">1.x</span><div><b>The Astral Express era</b><small>Apr 2023 – Jan 2024 · 7 patches · Herta Space Station, Jarilo-VI, Xianzhou Luofu</small></div></div>
 
-<h3>Versions 4.1–4.3</h3>
-<p>Planarcadia continued through 4.3 "The Lethe Below the Living" (Jun 1 2026), a Blade-centered story patch with challenge-mode changes. Fate collab phase 1 had run in 3.4 (Jul 2025) with Saber and Archer, establishing the collab as an annual summer tentpole. Revenue held mid-pack — $38.8M in May 2026, then $28.5M in June, consistent with a rerun-heavy pre-collab lull.</p>
+<div class="patch"><div class="p-head"><span class="p-ver">1.0</span><span class="p-title">The Rail Unto the Stars</span><span class="p-date">Apr 26 2023</span></div>
+<p><b>New:</b> Seele, Jing Yuan (plus the standard launch roster).</p>
+<p><b>Content:</b> Global launch across PC and mobile. Herta Space Station and the full Jarilo-VI / Belobog arc, with the Xianzhou Luofu arc opening late in the patch. Memory of Chaos and Simulated Universe as the endgame foundation.</p>
+<p><b>Reception:</b> Record launch — 20M day-one downloads, 30M+ pre-registrations, $6.3M first-day mobile revenue (above Genshin's launch), #1 iOS download chart in more countries than any prior game. The Belobog story set the early narrative reputation. May 2023 became the lifetime peak revenue month ($209.1M), driven by the Jing Yuan banner.</p></div>
 
-<h3>Version 4.4 · "In Ravages Does the Whistle Sound" · Jul 15 2026 — current</h3>
-<p><strong>Shipped:</strong> the Planarcadia story climax against Lord Ravager Asat Pramad; Himeko • Nova, a five-star Fire Erudition alt of a launch character, live the full patch; Fate phase 2 (Rin Tohsaka, Gilgamesh) from Jul 24, running until 4.6 with a 200-pull Light Cone selector; six rerun banners; Quick Level Up and achievement QoL.</p>
-<div class="callout"><span class="label">Assessment</span>4.4 is built as a revenue tentpole — a beloved launch-character alt stacked with two collab limiteds is the strongest banner lineup of the year. The cross-version collab window is a smart pressure-release valve and the selector is good-faith generosity. The risk is spending fatigue: three must-consider limiteds in six weeks, straight after an alt-heavy 4.x cycle. July–August revenue will show whether the stack worked or split wallets.</div>
+<div class="patch"><div class="p-head"><span class="p-ver">1.1</span><span class="p-title">Galactic Roaming</span><span class="p-date">Jun 7 2023</span></div>
+<p><b>New:</b> Silver Wolf, Luocha.</p>
+<p><b>Content:</b> Xianzhou Luofu story continuation; first post-launch event cycle.</p>
+<p><b>Reception:</b> Solid but quieter than launch; Silver Wolf's debuff/weakness-implant kit was praised as design. First signs of the Luofu arc landing softer than Belobog in story discussion.</p></div>
 
-<h3>Delivery discipline</h3>
-<p>Across 29 patches the six-week cadence has never publicly slipped; maintenance holds its ~5-hour window with standard compensation; pre-load is consistent. Delivery reliability is not a risk area — content composition within versions is.</p>
+<div class="patch"><div class="p-head"><span class="p-ver">1.2</span><span class="p-title">Even Immortality Ends</span><span class="p-date">Jul 19 2023</span></div>
+<p><b>New:</b> Blade, Kafka.</p>
+<p><b>Content:</b> Luofu arc climax against Phantylia; Stellaron Hunters take narrative center stage.</p>
+<p><b>Reception:</b> Kafka's banner performed strongly on character popularity. The Luofu arc's conclusion drew the game's first sustained story criticism — pacing and cast sprawl — a contrast players drew against Belobog.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">1.3</span><span class="p-title">Celestial Eyes Above Mortal Ruins</span><span class="p-date">Aug 30 2023</span></div>
+<p><b>New:</b> Imbibitor Lunae (Dan Heng alt), Fu Xuan.</p>
+<p><b>Content:</b> Simulated Universe: Swarm Disaster expansion; Trailblaze Power cap raised 180 → 240 (Developer Radio vol. 2).</p>
+<p><b>Reception:</b> Two durable positives — Swarm Disaster was widely called the best Simulated Universe content to date, and the stamina cap raise became the defining early proof of HSR's QoL responsiveness, constantly contrasted with Genshin's resin. Also the first launch-character alt, establishing the alt playbook.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">1.4</span><span class="p-title">Jolted Awake From a Winter Dream</span><span class="p-date">Oct 11 2023</span></div>
+<p><b>New:</b> Jingliu, Topaz &amp; Numby. <b>Platform:</b> PS5 launch (same day).</p>
+<p><b>Content:</b> Jingliu backstory missions; console expansion of the player base.</p>
+<p><b>Reception:</b> Jingliu was the strongest DPS release of 1.x and a major banner performer; Topaz seeded the follow-up archetype that 2.x would build on. PS5 launch broadened the funnel ahead of Penacony.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">1.5</span><span class="p-title">The Crepuscule Zone</span><span class="p-date">Nov 15 2023</span></div>
+<p><b>New:</b> Huohuo, Argenti.</p>
+<p><b>Content:</b> Fyxestroll Garden — a self-contained ghost-story chapter on the Luofu.</p>
+<p><b>Reception:</b> The horror-comedy tone was well liked and partially rehabilitated Luofu story sentiment; a quieter revenue patch by design.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">1.6</span><span class="p-title">Crown of the Mundane and Divine</span><span class="p-date">Dec 27 2023</span></div>
+<p><b>New:</b> Ruan Mei, Dr. Ratio — <b>given free to all players</b>.</p>
+<p><b>Content:</b> Pure Fiction added as the second rotating endgame mode; Xianzhou continuance missions.</p>
+<p><b>Reception:</b> The free five-star was unprecedented at HoYoverse scale and cemented the generosity brand — while triggering visible backlash in the Genshin community over unequal standards. Ruan Mei became one of the longest-lived supports in the game. Lifetime mobile revenue crossed $1B on Jan 14 2024, inside this patch window.</p></div>
+</div>
+
+<div class="era"><div class="era-head"><span class="era-num">2.x</span><div><b>The Penacony era</b><small>Feb – Dec 2024 · 8 patches · Penacony, then the Xianzhou interlude</small></div></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.0</span><span class="p-title">If One Dreams at Midnight</span><span class="p-date">Feb 6 2024</span></div>
+<p><b>New:</b> Black Swan, Sparkle.</p>
+<p><b>Content:</b> Penacony opens — the dreamscape planet that became the game's signature arc. One-time seven-week patch, the only cadence extension to date. Total downloads passed 100M this month.</p>
+<p><b>Reception:</b> Strong. Penacony's presentation, music, and mystery structure reset expectations for what an HSR arc could be.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.1</span><span class="p-title">Into the Yawning Chasm</span><span class="p-date">Mar 27 2024</span></div>
+<p><b>New:</b> Acheron, Aventurine.</p>
+<p><b>Content:</b> Penacony act two; first-anniversary celebration fell in this window.</p>
+<p><b>Reception:</b> Acheron was a phenomenon — one of the biggest banners in the game's history — and Aventurine's story arc was a highlight. Anniversary rewards were received as generous, reinforcing the expectation baseline.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.2</span><span class="p-title">Then Wake to Weep</span><span class="p-date">May 8 2024</span></div>
+<p><b>New:</b> Robin, Boothill.</p>
+<p><b>Content:</b> Penacony main-story climax.</p>
+<p><b>Reception:</b> The 2.2 finale is still cited as the game's story peak. In hindsight, community powercreep timelines also mark 2.x anniversary-era units as the start of the acceleration that became the dominant complaint.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.3</span><span class="p-title">Farewell, Penacony</span><span class="p-date">Jun 19 2024</span></div>
+<p><b>New:</b> Firefly, Jade.</p>
+<p><b>Content:</b> Penacony epilogue; Apocalyptic Shadow added as the third rotating endgame mode; Divergent Universe roguelike overhaul.</p>
+<p><b>Reception:</b> Firefly's release was a CN-driven hype event and one of the top banner performances of 2024. Divergent Universe's faster, build-crazier format was well received. DAU peaked at 3.33M in August 2024, the all-time high.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.4</span><span class="p-title">Finest Duel Under the Pristine Blue</span><span class="p-date">Jul 31 2024</span></div>
+<p><b>New:</b> Yunli, March 7th (Hunt form — free path swap).</p>
+<p><b>Content:</b> Return to the Xianzhou Luofu; The Shackling Prison area; start of the Wardance storyline.</p>
+<p><b>Reception:</b> Mixed. The pivot back to the Luofu straight after Penacony's high read as a cooldown to many players; the free March path swap was a liked mechanic. This stretch is where mid-arc "filler patch" discourse took hold.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.5</span><span class="p-title">Flying Aureus Shot to Lupine Rue</span><span class="p-date">Sep 10 2024</span></div>
+<p><b>New:</b> Feixiao, Lingsha.</p>
+<p><b>Content:</b> Wardance climax against Hoolay.</p>
+<p><b>Reception:</b> Feixiao landed as a top Hunt DPS and the Wardance conclusion was better received than 2.4's setup, without recapturing Penacony-level attention.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.6</span><span class="p-title">Annals of Pinecany's Mappou Age</span><span class="p-date">Oct 23 2024</span></div>
+<p><b>New:</b> Rappa. <b>Platform:</b> PS5 Pro support window.</p>
+<p><b>Content:</b> Self-contained ninja-comedy chapter; console uplift.</p>
+<p><b>Reception:</b> A deliberately light patch; Rappa's break kit was liked, revenue was seasonal-low. The PS5 ecosystem push (with the Pro launch) contributed to the MAU climb toward the Feb 2025 peak.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">2.7</span><span class="p-title">A Foxian Tale of the Haunted</span><span class="p-date">Dec 4 2024</span></div>
+<p><b>New:</b> Sunday, Fugue.</p>
+<p><b>Content:</b> Bridge patch to Amphoreus; the Fate/stay night collaboration was announced in this window for 2025.</p>
+<p><b>Reception:</b> Sunday (a Penacony fan favorite) was a strong close to the year, and the Fate announcement generated the biggest cross-community anticipation spike since launch. MAU hit its all-time official peak of 30.1M in Feb 2025, up 66% year over year, on the strength of this run-up plus 3.0's launch.</p></div>
+</div>
+
+<div class="era"><div class="era-head"><span class="era-num">3.x</span><div><b>The Amphoreus era</b><small>Jan 2025 – Feb 2026 · 9 patches · the game's most ambitious and most contested arc</small></div></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.0</span><span class="p-title">Paean of Era Nova</span><span class="p-date">Jan 15 2025</span></div>
+<p><b>New:</b> The Herta, Aglaea (introducing the Remembrance Path).</p>
+<p><b>Content:</b> Amphoreus opens — mythological scale, the Chrysos Heirs saga, a new Path.</p>
+<p><b>Reception:</b> The most polarized launch in the game's history. Praise for ambition and scale; sustained criticism of lore-exposition density, over-complex main-story puzzles, and a Memory of Chaos tuning spike that CN communities read as pull pressure. This patch triggered the Developer Radio 3.0 Special Edition — dialogue skip for lore explanations, simplified puzzles, and the older-character buff program announcement — the clearest feedback-to-ship case on record, and it was received well.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.1</span><span class="p-title">Light Slips the Gate, Shadow Greets the Throne</span><span class="p-date">Feb 26 2025</span></div>
+<p><b>New:</b> Tribbie, Mydei.</p>
+<p><b>Content:</b> Amphoreus act two.</p>
+<p><b>Reception:</b> Both units were immediately meta-defining, which sharpened rather than calmed the powercreep debate — community comparisons of Mydei against Blade became a standard exhibit in HP-inflation threads. Lifetime mobile revenue crossed $2B on Mar 23 2025, 23 months after launch.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.2</span><span class="p-title">Through the Petals in the Land of Repose</span><span class="p-date">Apr 9 2025</span></div>
+<p><b>New:</b> Castorice, Anaxa.</p>
+<p><b>Content:</b> Second-anniversary window with expanded reward package.</p>
+<p><b>Reception:</b> Castorice was the most anticipated unit of the era and the anniversary generosity landed; April 2025 posted $71.2M, the highest single month in recent tracking. The commercial peak of 3.x.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.3</span><span class="p-title">The Fall at Dawn's Rise</span><span class="p-date">May 21 2025</span></div>
+<p><b>New:</b> Hyacine, Cipher.</p>
+<p><b>Content:</b> Amphoreus mid-arc; tragedy-heavy story beats.</p>
+<p><b>Reception:</b> Story reception improved as the arc's structure became legible; meta discourse stayed hot as Remembrance-centered teams consolidated the top of clear charts.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.4</span><span class="p-title">For the Sun is Set to Die</span><span class="p-date">Jul 2 2025</span></div>
+<p><b>New:</b> Phainon; <b>Fate/stay night collab phase 1</b> — Saber (from Jul 11) and Archer.</p>
+<p><b>Content:</b> Amphoreus climax buildup plus the game's first external mega-IP crossover.</p>
+<p><b>Reception:</b> The collab was a global engagement event and established the summer-tentpole pattern; Phainon was among the biggest CN banner draws of the year. The strongest sustained positive window of 3.x.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.5</span><span class="p-title">&nbsp;</span><span class="p-date">Aug 13 2025</span></div>
+<p><b>New:</b> Hysilens, Cerydra.</p>
+<p><b>Content:</b> Amphoreus continuation; Lygus revealed as an antagonist force; Hysilens reworked DoT viability.</p>
+<p><b>Reception:</b> Kit design was praised (a DoT revival was a long-standing request); arc-length fatigue started appearing in sentiment as Amphoreus passed the six-patch mark.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.6</span><span class="p-title">&nbsp;</span><span class="p-date">Sep 2025</span></div>
+<p><b>New:</b> Evernight (March 7th's dark alt), Dan Heng • Permansor Terrae.</p>
+<p><b>Content:</b> Amphoreus late acts; two Astral Express alts in one patch.</p>
+<p><b>Reception:</b> Both units performed on attachment to the core cast, but the alt density in a single patch fed the "roster reruns" strand of powercreep discourse.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.7</span><span class="p-title">&nbsp;</span><span class="p-date">Nov 2025</span></div>
+<p><b>New:</b> Cyrene.</p>
+<p><b>Content:</b> Amphoreus finale — the battle against Lord Ravager Irontomb and its creator Lygus closes the arc.</p>
+<p><b>Reception:</b> The finale's emotional payoff reviewed well with arc-invested players; the wider mood, reflected in early-2026 press, had settled into "3.x fatigue," with the whole phase later described as disappointing relative to Penacony.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">3.8</span><span class="p-title">Memories are the Prelude to Dreams</span><span class="p-date">Dec 16 2025</span></div>
+<p><b>New:</b> The Dahlia (Annihilation Gang).</p>
+<p><b>Content:</b> Bridge patch to 4.0: one new unit, six reruns across three phases (Firefly, Fugue, Lingsha, Aglaea, Sunday), and the Currency Wars mode live in this window ahead of its 4.0 expansion.</p>
+<p><b>Reception:</b> Understood as a breather; rerun-heavy structure kept spending seasonal-low into the 4.0 reveal, which then landed to a skeptical audience.</p></div>
+</div>
+
+<div class="era"><div class="era-head"><span class="era-num">4.x</span><div><b>The Planarcadia era</b><small>Feb 2026 – present · 5 patches so far · the deliberate course correction</small></div></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">4.0</span><span class="p-title">No Aha at Full Moon</span><span class="p-date">Feb 13 2026</span></div>
+<p><b>New:</b> Sparxie, Yao Guang — launching the Path of Elation.</p>
+<p><b>Content:</b> Planarcadia plus the Astropolis split-world structure; level cap raised to 110 (first since launch); Currency Wars expanded difficulty; Phantasmoon Games festival framework; fewer traditional events, more minigames; a Fortnite creator-ecosystem tie-in for discovery.</p>
+<p><b>Reception:</b> The reveal drew concern — event reduction, no signature trailer, arriving off a fatigued 3.x. Post-launch, sentiment flipped decisively: press called it the most fun the game had been in a long time, and generosity plus time-respect were repeatedly singled out. An operational case study in recovering a bad reveal through the product. The minigames-vs-events tradeoff remains the era's live debate.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">4.1</span><span class="p-title">&nbsp;</span><span class="p-date">Mar 2026</span></div>
+<p><b>New:</b> Ashveil.</p>
+<p><b>Content:</b> Planarcadia act two within the Phantasmoon Games framework.</p>
+<p><b>Reception:</b> Steady continuation; the 4.0 goodwill carried, with HSR climbing PC play rankings in the Feb–Mar window.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">4.2</span><span class="p-title">&nbsp;</span><span class="p-date">Apr 21 2026</span></div>
+<p><b>New:</b> Silver Wolf LV.999, Evanescia; <b>Trailblazer (Elation)</b> unlocked free through the story — a new Lightning form for the main character.</p>
+<p><b>Content:</b> Third-anniversary window; a launch-roster favorite reimagined as a limited unit.</p>
+<p><b>Reception:</b> The free Trailblazer form was received as the right kind of anniversary generosity; Silver Wolf LV.999 performed on nostalgia. It also extended the alt-heavy pattern that pull-planning discourse tracks warily.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">4.3</span><span class="p-title">The Lethe Below the Living</span><span class="p-date">Jun 1 2026</span></div>
+<p><b>New:</b> Mortenax Blade.</p>
+<p><b>Content:</b> Blade's fate-confrontation arc in the World in Canvas; Inkford Hermitage area; challenge-mode changes.</p>
+<p><b>Reception:</b> A character-study patch for one of the game's most popular units; well received narratively. Revenue softened into the pre-collab lull — $38.8M in May, $28.5M in June, the month WuWa overtook all HoYoverse titles.</p></div>
+
+<div class="patch"><div class="p-head"><span class="p-ver">4.4</span><span class="p-title">In Ravages Does the Whistle Sound</span><span class="p-date">Jul 15 2026 · current</span></div>
+<p><b>New:</b> Himeko • Nova; <b>Fate/stay night collab phase 2</b> — Rin Tohsaka and Gilgamesh (from Jul 24, banners running until 4.6, with a 200-pull Light Cone selector).</p>
+<p><b>Content:</b> Planarcadia climax against Lord Ravager Asat Pramad; six rerun banners; Quick Level Up and instant achievement claims.</p>
+<p><b>Reception:</b> Strong pre-launch anticipation on the Himeko alt and the collab return. Built as the year's revenue tentpole — and its central risk is spending fatigue: three must-consider limiteds in six weeks, straight after an alt-heavy cycle. July–August revenue will show whether the stack worked or split wallets.</p></div>
+</div>
+
+<h3>Cross-era patterns</h3>
+<p><strong>The arc rhythm repeats.</strong> Each era opens on a high-investment story launch, peaks commercially mid-arc (Jing Yuan/May 2023, Acheron–Firefly 2024, Castorice/Apr 2025), then decays through late-arc bridge patches before the next reveal. The bridge patches (1.5, 2.4–2.6, 3.8) are where drought sentiment concentrates — and where 4.0's festival structure is aimed.</p>
+<p><strong>Alts are a compounding lever with a compounding cost.</strong> From Imbibitor Lunae (1.3) through March Hunt (2.4), Evernight and Permansor Terrae (3.6), the Elation Trailblazer (4.2), Mortenax Blade (4.3), and Himeko Nova (4.4), alt cadence has accelerated every era. Each individually performs on attachment; collectively they feed the "roster reruns" perception now tracked in Section 8.</p>
+<p><strong>Feedback responses land, and they land hardest after crises.</strong> The three biggest goodwill events after launch — the 1.3 stamina raise, the 1.6 free five-star, the 3.0 Special Edition — were all responses to accumulated feedback. The pattern argues for making the response cadence continuous (Recommendation P2) rather than saving it for recoveries.</p>
+<p><strong>Delivery itself has never been the problem.</strong> Twenty-nine patches, one planned seven-week exception (2.0), ~5-hour maintenance windows, consistent pre-loads. Every operational risk in this game lives in content composition and tuning, not in shipping.</p>
 </section>
+
 <section id="s5" class="reveal">
 <div class="sec-tag">05 / COMMUNITY SENTIMENT</div>
 <h2>Where the conversation happens, and how it moved</h2>
