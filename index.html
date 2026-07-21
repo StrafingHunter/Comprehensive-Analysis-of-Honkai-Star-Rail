@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASTRAL — Honkai: Star Rail Live-Service Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700;900&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* palette aligned with ASTRAL index.html */
+  --ink:#070a16;        /* deepest space floor — page base */
+  --deep:#0e1730;       /* mid-navy — panels */
+  --surface:#16224a;    /* panel navy (nebula core) — raised */
+  --foam:#e6ecfb;       /* star white — text */
+  --foam-dim:#9aa8cc;   /* dimmed starlight — secondary */
+  --faint:#5a6690;
+  --lume:#4b9fe8;       /* bright nebula glow — primary accent */
+  --amber:#f3c56b;      /* warm star-gold — revenue, milestones, station nodes */
+  --rose:#e3799f;       /* nebula rose — friction / decline */
+  --card:rgba(7,10,22,.72);
+  --edge:#1e2a4e;
+  --edge-strong:#33447a;
+  --display:'Unbounded',sans-serif;
+  --body:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{color:var(--foam);font-family:var(--body);font-size:16px;line-height:1.68;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(52% 40% at 18% 22%, rgba(75,159,232,.14), transparent 70%),
+    radial-gradient(45% 38% at 82% 12%, rgba(227,121,159,.10), transparent 70%),
+    radial-gradient(60% 50% at 70% 85%, rgba(30,74,138,.22), transparent 70%),
+    linear-gradient(180deg,#0b1226,var(--ink) 60%),
+    var(--ink);
+  background-attachment:fixed}
+::selection{background:var(--lume);color:var(--ink)}
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.frame{position:relative;z-index:1;display:flex;max-width:1240px;margin:0 auto}
+
+/* ---------- route-line sidebar ---------- */
+nav.route{position:sticky;top:0;align-self:flex-start;height:100vh;width:250px;flex:0 0 250px;padding:44px 24px 44px 32px;overflow-y:auto;scrollbar-width:none}
+.xlink-brief{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--foam-dim);border:1px solid var(--edge);border-radius:6px;padding:8px 12px;margin:0 0 22px;text-decoration:none;transition:color .2s,border-color .2s;white-space:nowrap}
+.xlink-brief:hover{color:var(--foam);border-color:var(--lume)}
+nav.route::-webkit-scrollbar{display:none}
+.brand{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.26em;color:var(--lume)}
+.brand small{display:block;font-family:var(--mono);font-weight:400;font-size:9.5px;letter-spacing:.18em;color:var(--foam-dim);margin-top:8px}
+.route-list{list-style:none;margin-top:36px;position:relative}
+.route-list::before{content:"";position:absolute;left:5px;top:10px;bottom:10px;width:1px;background:linear-gradient(180deg,var(--lume),rgba(75,159,232,.15))}
+.route-list li{position:relative;padding-left:24px;margin-bottom:2px}
+.route-list a{display:block;padding:7px 0;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--foam-dim);text-decoration:none;transition:color .2s}
+.route-list a::before{content:"";position:absolute;left:1px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;border:1.5px solid var(--edge-strong);background:var(--ink);transition:all .2s}
+.route-list a:hover{color:var(--foam)}
+.route-list li.active a{color:var(--lume)}
+.route-list li.active a::before{border-color:var(--amber);background:var(--amber);box-shadow:0 0 9px rgba(243,197,107,.7)}
+
+/* ---------- main column ---------- */
+main{flex:1;min-width:0;padding:44px 48px 120px}
+header.hero{padding:36px 0 44px;border-bottom:1px solid var(--edge)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--lume)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.4vw,38px);line-height:1.2;margin:16px 0 20px;letter-spacing:.01em}
+h1 .thin{color:var(--foam-dim);font-weight:300;font-size:.62em;display:inline-block;margin-top:6px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px 28px;font-family:var(--mono);font-size:12px;color:var(--foam-dim)}
+.hero-meta b{color:var(--amber);font-weight:500}
+
+section{padding:52px 0;border-bottom:1px solid var(--edge)}
+.sec-tag{font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:var(--lume)}
+h2{font-family:var(--display);font-weight:500;font-size:21px;margin:12px 0 22px;letter-spacing:.01em}
+h3{font-family:var(--display);font-weight:500;font-size:14.5px;margin:34px 0 12px;color:var(--foam);letter-spacing:.03em}
+h3 .sys{color:var(--lume);font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;margin-right:8px}
+p{margin-bottom:14px;color:var(--foam);max-width:74ch}
+p.dim,li.dim{color:var(--foam-dim)}
+strong{font-weight:600;color:var(--foam)}
+em{font-style:italic}
+a{color:var(--lume)}
+
+.lede{font-size:17.5px;line-height:1.65;color:var(--foam)}
+.callout{background:var(--card);border:1px solid var(--edge);border-left:3px solid var(--lume);border-radius:8px;padding:18px 22px;margin:22px 0;font-size:14.5px;backdrop-filter:blur(2px)}
+.callout.gold{border-left-color:var(--amber)}
+.callout .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--lume);display:block;margin-bottom:6px}
+.callout.gold .label{color:var(--amber)}
+
+ol.findings{list-style:none;counter-reset:f;margin:8px 0}
+ol.findings li{counter-increment:f;position:relative;padding:16px 20px 16px 62px;background:var(--card);border:1px solid var(--edge);border-radius:8px;margin-bottom:10px;font-size:14.5px}
+ol.findings li::before{content:counter(f,decimal-leading-zero);position:absolute;left:20px;top:17px;font-family:var(--mono);font-size:13px;color:var(--amber)}
+
+/* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;margin:20px 0;border:1px solid var(--edge);border-radius:10px;background:var(--deep)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:640px}
+th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--foam-dim);text-align:left;padding:13px 16px;border-bottom:1px solid var(--edge-strong);background:var(--surface)}
+td{padding:12px 16px;border-bottom:1px solid var(--edge);vertical-align:top;color:var(--foam)}
+tr:last-child td{border-bottom:none}
+td.hl{color:var(--lume);font-family:var(--body);font-weight:600}
+.amt{color:var(--amber);font-family:var(--mono)}
+
+.pill{display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.pill.pos{color:var(--lume);border:1px solid rgba(75,159,232,.45);background:rgba(75,159,232,.1)}
+.pill.neg{color:var(--rose);border:1px solid rgba(227,121,159,.45);background:rgba(227,121,159,.1)}
+.pill.mix{color:var(--amber);border:1px solid rgba(243,197,107,.45);background:rgba(243,197,107,.1)}
+.sev-high{color:var(--rose);font-family:var(--mono);font-size:12px}
+.sev-med{color:var(--amber);font-family:var(--mono);font-size:12px}
+.sev-low{color:var(--lume);font-family:var(--mono);font-size:12px}
+
+/* ---------- recommendations ---------- */
+.rec{background:var(--card);border:1px solid var(--edge);border-radius:10px;padding:22px 24px;margin-bottom:14px}
+.rec .prio{font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:3px 10px;border-radius:4px;margin-right:10px}
+.prio.p0{background:rgba(227,121,159,.12);color:var(--rose);border:1px solid rgba(227,121,159,.45)}
+.prio.p1{background:rgba(243,197,107,.1);color:var(--amber);border:1px solid rgba(243,197,107,.45)}
+.prio.p2{background:rgba(75,159,232,.1);color:var(--lume);border:1px solid rgba(75,159,232,.45)}
+.prio.p3{background:rgba(154,168,204,.08);color:var(--foam-dim);border:1px solid var(--edge)}
+.rec h4{display:inline;font-family:var(--display);font-size:14px;font-weight:500;letter-spacing:.02em}
+.rec p{margin-top:12px;font-size:14.5px}
+.rec .ev{font-family:var(--mono);font-size:11.5px;color:var(--foam-dim);margin-top:8px;margin-bottom:0}
+
+/* ---------- references ---------- */
+.ref-group{font-family:var(--display);font-size:12px;font-weight:500;color:var(--lume);letter-spacing:.1em;margin:28px 0 12px;text-transform:uppercase}
+ol.refs{margin-left:0;list-style:none;counter-reset:r}
+ol.refs li{counter-increment:r;position:relative;padding:10px 0 10px 44px;border-bottom:1px solid var(--edge);font-size:13.5px;color:var(--foam-dim)}
+ol.refs li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:10px;font-family:var(--mono);font-size:12px;color:var(--amber)}
+ol.refs b{color:var(--foam);font-weight:600}
+ol.refs a{font-family:var(--mono);font-size:11px;word-break:break-all;color:var(--lume);text-decoration:none}
+ol.refs a:hover{text-decoration:underline}
+
+footer{padding:44px 0 0;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em}
+
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+@media (max-width:900px){
+  .frame{display:block}
+  nav.route{position:relative;height:auto;width:auto;padding:28px 22px 0}
+  .route-list{display:flex;flex-wrap:wrap;gap:2px 16px;margin-top:20px}
+  .route-list::before{display:none}
+  .route-list li{padding-left:0}
+  .route-list a::before{display:none}
+  main{padding:10px 22px 90px}
+  table{min-width:560px}
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="frame">
+
+<nav class="route" aria-label="Report sections">
+  <div class="brand">ASTRAL<small>LIVE-SERVICE INTELLIGENCE</small></div>
+  <a class="xlink-brief" href="deep-dive-briefing.html" title="Open the interactive briefing">← INTERACTIVE BRIEFING</a>
+  <ul class="route-list" id="routeList">
+    <li><a href="#s1">Executive Summary</a></li>
+    <li><a href="#s2">Key Findings</a></li>
+    <li><a href="#s3">Gameplay Systems</a></li>
+    <li><a href="#s4">Version Review</a></li>
+    <li><a href="#s5">Community Sentiment</a></li>
+    <li><a href="#s6">Feedback Summary</a></li>
+    <li><a href="#s7">Competitive Analysis</a></li>
+    <li><a href="#s8">Operational Risks</a></li>
+    <li><a href="#s9">Recommendations</a></li>
+    <li><a href="#s10">References</a></li>
+  </ul>
+</nav>
+
+<main>
+<header class="hero">
+  <div class="eyebrow">Comprehensive Live-Service Analysis</div>
+  <h1>Honkai: Star Rail<br><span class="thin">v1.0 → v4.4 · three years in service</span></h1>
+  <div class="hero-meta">
+    <span>COVERAGE <b>APR 26 2023 – JUL 2026</b></span>
+    <span>PATCHES <b>29</b></span>
+    <span>LIFETIME MOBILE <b>$2B+</b></span>
+    <span>PREPARED <b>JUL 22 2026</b></span>
+  </div>
+</header>
+<section id="s1" class="reveal">
+<div class="sec-tag">01 / EXECUTIVE SUMMARY</div>
+<h2>Three eras, one course correction</h2>
+<p class="lede">Honkai: Star Rail is three years into live service and remains one of the top-grossing gacha RPGs in the world, but its position has changed. The launch and Penacony years (2023–2024) were defined by record revenue, fast QoL delivery, and a reputation as the "generous" HoYoverse title. The Amphoreus year (2025) was defined by friction: powercreep complaints, story pacing criticism, and a visible MAU decline after the February 2025 peak.</p>
+<p>The Planarcadia era (2026) is a deliberate course correction — a new Path, a level cap raise, festival-style content, dialogue skip, and heavy collaboration play through Fate/stay night. Early reception suggests it is working on sentiment, though not yet fully on revenue: HSR was outearned by Wuthering Waves and Genshin Impact in June 2026.</p>
+<div class="callout gold"><span class="label">Core takeaway</span>The game's biggest risks are internal — powercreep trust, endgame tuning, mid-version content droughts — not external. Players HSR loses cite fatigue and meta pressure more than a better alternative. The recommendations prioritize rebuilding meta trust and smoothing pacing over adding new systems.</div>
+<p class="dim" style="font-size:14.5px">All figures are sourced from third-party trackers or official statements (Section 10). Judgment calls are marked as assessments.</p>
+</section>
+
+<section id="s2" class="reveal">
+<div class="sec-tag">02 / KEY FINDINGS</div>
+<h2>Seven signals from the data</h2>
+<ol class="findings">
+<li><strong>Lifetime performance is strong but decelerating.</strong> $2B lifetime mobile revenue reached March 2025 (23 months). June 2026 monthly revenue was $28.5M, down from $38.8M in May — fourth among gacha titles, behind Wuthering Waves ($34M) for the first time.</li>
+<li><strong>The player base contracted after early 2025.</strong> MAU peaked at 30.1M (Feb 2025, official) and settled near 11.5M by mid-2025 (tracker estimate). Normal post-peak stabilization, but the slope matters.</li>
+<li><strong>Powercreep is the most persistent negative theme.</strong> Continuous in CN and EN communities since mid-2024, peaking around the 3.0 Memory of Chaos, and directly forcing the announced older-character buff program.</li>
+<li><strong>The feedback loop demonstrably works when used.</strong> The 3.0 Developer Radio Special Edition — skip feature, puzzle simplification, buff program — is the clearest case of feedback converting to shipped changes, and it landed well.</li>
+<li><strong>Version 4.0 reversed a negative sentiment trend.</strong> Pre-launch concern over fewer events and a "disappointing 3.x phase" flipped to broadly positive reception; press called it the most fun the game had been in a long time.</li>
+<li><strong>Collaborations are now a core lever.</strong> The Fate/stay night collab (phase 1 in 3.4, phase 2 in 4.4) is HSR's biggest external IP play, and market data shows collabs moving spend genre-wide — Wuthering Waves × Cyberpunk: Edgerunners drove its June 2026 surge.</li>
+<li><strong>ZZZ's underperformance shows HoYoverse titles are not immune to decline</strong> ($9.7M in June 2026), which raises the internal bar for HSR to hold its portfolio slot.</li>
+</ol>
+</section>
+
+<section id="s3" class="reveal">
+<div class="sec-tag">03 / GAMEPLAY &amp; CORE EXPERIENCE</div>
+<h2>System-by-system review</h2>
+
+<h3><span class="sys">3.1</span>New player onboarding &amp; tutorial flow</h3>
+<p>New players start on the Herta Space Station with a linear, story-driven opening, then move to Jarilo-VI. Mechanics unlock progressively behind Trailblaze Level and story; tutorials are pop-up panels archived in a guide menu.</p>
+<p><strong>Strengths.</strong> Low skill floor, story-first hook, auto-battle and 2x speed early — well suited to mobile sessions. <strong>Weaknesses.</strong> The catch-up wall grows yearly: a 2026 newcomer faces four arcs, several endgame modes, and a roster built around modern kits; text tutorials are forgettable; early jade income feels slow against current pull costs.</p>
+<p class="dim"><em>Assessment:</em> fine for story-driven players, weak for gacha migrants who want current content fast. 4.x quietly acknowledged returning-player friction (Quick Level Up in 4.4, catch-up generosity in 4.0). A packaged "express track" — recap, loaner units, catch-up bundle — would lower the wall.</p>
+
+<h3><span class="sys">3.2</span>Combat mechanics</h3>
+<p>Turn-based combat with a shared skill-point pool, elemental weakness break, toughness bars, off-turn ultimates, and Paths as roles. Version 4.0 added the Path of Elation and raised the level cap to 110 — the first cap raise since launch.</p>
+<p><strong>Strengths.</strong> Real team-building depth; the system has absorbed break archetypes (2.x) and follow-up/summon archetypes (3.x) cleanly. <strong>Weaknesses.</strong> HP inflation: endgame enemy stat growth outpaced older units, converting natural power growth into perceived forced obsolescence. Community usage data (HomDGCat sheets in CN discourse) circulated as evidence that 1.x/2.x limiteds stopped clearing comfortably by 3.0.</p>
+<p class="dim"><em>Assessment:</em> the mechanics are healthy; the tuning around them is the problem. The 2025 buff program was the right lever — scope and follow-through decide whether trust recovers.</p>
+
+<h3><span class="sys">3.3</span>Character progression &amp; team building</h3>
+<p>Characters level with EXP materials, ascend on boss drops, upgrade Traces with path materials; Light Cones act as Path-keyed weapons; Eidolons add kit upgrades. Teams run four units — DPS, amplifier, sustain.</p>
+<p><strong>Strengths.</strong> Archetypes feel genuinely different (break, follow-up, DoT, hypercarry, Remembrance, Elation); the 200-pull Light Cone selector in 4.4's collab structure is a notable generosity experiment. <strong>Weaknesses.</strong> Best-in-slot support dependency raises the effective cost of a working team from one banner to two or three; four-stars have largely left the endgame conversation since 3.x — a repeated complaint.</p>
+
+<h3><span class="sys">3.4</span>Equipment &amp; Relic system</h3>
+<p>Four relic slots plus two Planar Ornaments, random main stats and substats, farmed from stamina-gated domains. Self-modeling resin, relic crafting, and substat tools arrived across 2.x–3.x.</p>
+<p><strong>Strengths.</strong> HoYoverse has sanded the worst RNG edges faster than Genshin did with artifacts — a comparison players make favorably. <strong>Weaknesses.</strong> Still the least-liked grind; stat-check pressure from HP inflation makes relic quality feel mandatory, linking this system directly to the powercreep complaint.</p>
+
+<h3><span class="sys">3.5</span>Economy &amp; resource acquisition</h3>
+<p>Stellar Jade from story, events, endgame resets, and purchase; Trailblaze Power (cap 240 plus reserve) gates farming. Income is roughly stable per patch, spiking at anniversaries and milestones.</p>
+<p><strong>Strengths.</strong> Generosity is the brand: free Dr. Ratio (1.6), free anniversary units, larger event payouts than Genshin; 4.0 press specifically praised pull and material generosity. <strong>Weaknesses.</strong> Generosity created expectation lock-in — every anniversary is measured against the last — and 4.4's dual-collab-plus-alt structure concentrates spending pressure.</p>
+
+<h3><span class="sys">3.6</span>Daily &amp; weekly activities</h3>
+<p>Daily Training completes in a few actions (simplified across 2.x); weekly Simulated Universe points and Echo of War runs. The loop takes 5–10 minutes — one of the shortest in the genre — and the 1.3 stamina cap raise plus reserve power removed login pressure early. The gap: mid-patch weeks feel empty for invested players, the drought 4.0's festival structure tries to answer.</p>
+
+<h3><span class="sys">3.7</span>Endgame content</h3>
+<p>Three rotating challenge modes — Memory of Chaos (turn-limited), Pure Fiction (waves, added 1.6), Apocalyptic Shadow (boss focus, added 2.3) — plus Simulated Universe roguelikes (Swarm Disaster, Gold &amp; Gears, Divergent Universe) and 4.x's Currency Wars with an expanded difficulty tier.</p>
+<p><strong>Strengths.</strong> Mode variety spreads roster value; the roguelike format keeps iterating rather than resetting the same ladder. <strong>Weaknesses.</strong> Endgame is where powercreep is felt — 3.0-era Memory of Chaos difficulty caused visible frustration in both regions, and because full clears pay premium currency, tuning misses read as revenue pressure.</p>
+<div class="callout"><span class="label">Assessment</span>This is the highest-leverage system in the game for sentiment. Every major negative spike since 2024 traces to an endgame tuning decision.</div>
+
+<h3><span class="sys">3.8</span>Accessibility &amp; Quality-of-Life</h3>
+<p>Shipped in rough order: auto-battle and 2x speed (launch) → stamina cap raise (1.3) → reserve power → daily training simplification (2.x) → relic crafting and substat tools (2.x–3.x) → lore-dialogue skip and puzzle simplification (post-3.0 response) → Quick Level Up and instant achievement claims (4.4).</p>
+<p class="dim"><em>Assessment:</em> QoL delivery speed is a genuine, sustained strength and core to HSR's identity against Genshin. The pattern worth noting: the biggest wins came as responses to loud feedback — proof the pipeline works, and proof some issues waited for volume before action.</p>
+</section>
+
+<section id="s4" class="reveal">
+<div class="sec-tag">04 / LIVE OPERATIONS &amp; VERSION REVIEW</div>
+<h2>The 3.x → 4.x turn</h2>
+<p>The 3.x Amphoreus cycle (Jan 2025 – early 2026) delivered the most ambitious story arc but accumulated friction: exposition-heavy writing, complex puzzles, hard endgame tuning, continuous powercreep discourse. Early-2026 press openly called 3.x a "disappointing" phase. The mid-cycle Developer Radio response partially recovered sentiment.</p>
+
+<h3>Version 4.0 · "No Aha at Full Moon" · Feb 13 2026</h3>
+<p><strong>Shipped:</strong> Planarcadia plus the Astropolis split-world structure, the Path of Elation with Sparxie and Yao Guang, level cap 110, Currency Wars expanded difficulty, the Phantasmoon Games festival structure, fewer traditional events replaced with minigames, and a Fortnite creator-ecosystem tie-in for discovery.</p>
+<p><strong>Did it hit its goals?</strong> The reveal landed poorly — players worried about the event reduction and the missing signature trailer. Post-launch, reception flipped: coverage praised the lighthearted tone after Amphoreus, the generosity, and the time-respect. As an operational case, 4.0 is a successful risk: it changed the version formula and recovered from a bad reveal through the product itself. <strong>New issues:</strong> the two-world structure and minigame-heavy design remain divisive for combat-focused players.</p>
+
+<h3>Versions 4.1–4.3</h3>
+<p>Planarcadia continued through 4.3 "The Lethe Below the Living" (Jun 1 2026), a Blade-centered story patch with challenge-mode changes. Fate collab phase 1 had run in 3.4 (Jul 2025) with Saber and Archer, establishing the collab as an annual summer tentpole. Revenue held mid-pack — $38.8M in May 2026, then $28.5M in June, consistent with a rerun-heavy pre-collab lull.</p>
+
+<h3>Version 4.4 · "In Ravages Does the Whistle Sound" · Jul 15 2026 — current</h3>
+<p><strong>Shipped:</strong> the Planarcadia story climax against Lord Ravager Asat Pramad; Himeko • Nova, a five-star Fire Erudition alt of a launch character, live the full patch; Fate phase 2 (Rin Tohsaka, Gilgamesh) from Jul 24, running until 4.6 with a 200-pull Light Cone selector; six rerun banners; Quick Level Up and achievement QoL.</p>
+<div class="callout"><span class="label">Assessment</span>4.4 is built as a revenue tentpole — a beloved launch-character alt stacked with two collab limiteds is the strongest banner lineup of the year. The cross-version collab window is a smart pressure-release valve and the selector is good-faith generosity. The risk is spending fatigue: three must-consider limiteds in six weeks, straight after an alt-heavy 4.x cycle. July–August revenue will show whether the stack worked or split wallets.</div>
+
+<h3>Delivery discipline</h3>
+<p>Across 29 patches the six-week cadence has never publicly slipped; maintenance holds its ~5-hour window with standard compensation; pre-load is consistent. Delivery reliability is not a risk area — content composition within versions is.</p>
+</section>
+<section id="s5" class="reveal">
+<div class="sec-tag">05 / COMMUNITY SENTIMENT</div>
+<h2>Where the conversation happens, and how it moved</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Platform</th><th>Role in the ecosystem</th></tr></thead>
+<tbody>
+<tr><td class="hl">HoYoLAB</td><td>Official hub; Developer Radio posts are the formal feedback-response channel</td></tr>
+<tr><td class="hl">Reddit</td><td>r/HonkaiStarRail + leaks sub — largest EN venue; leaks discourse sets pull planning</td></tr>
+<tr><td class="hl">NGA / Bilibili / Weibo</td><td>CN discourse; repeatedly leads global sentiment (powercreep, MOC difficulty started here)</td></tr>
+<tr><td class="hl">Official Discord</td><td>Fast reaction during livestreams and launches</td></tr>
+<tr><td class="hl">YouTube</td><td>Creator verdict videos shape casual perception</td></tr>
+<tr><td class="hl">X / Twitter</td><td>Announcement engagement, drip-marketing reception</td></tr>
+<tr><td class="hl">Facebook</td><td>SEA-heavy audience; relevant to Singapore-managed regions</td></tr>
+</tbody></table></div>
+
+<h3>Sentiment timeline — major swings</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Period</th><th>Event</th><th>Direction</th></tr></thead>
+<tbody>
+<tr><td>Apr–May 2023</td><td>Launch: 20M day-one downloads, record chart placement</td><td><span class="pill pos">Strongly positive</span></td></tr>
+<tr><td>Aug 2023</td><td>Stamina cap raise (1.3)</td><td><span class="pill pos">Positive</span></td></tr>
+<tr><td>Dec 2023</td><td>Free Dr. Ratio (1.6) — with cross-community Genshin backlash</td><td><span class="pill pos">Positive</span></td></tr>
+<tr><td>Feb–May 2024</td><td>Penacony arc; 2.2 finale — story reputation peak</td><td><span class="pill pos">Positive</span></td></tr>
+<tr><td>Mid 2024 →</td><td>Powercreep discourse begins post-Penacony</td><td><span class="pill neg">Negative, recurring</span></td></tr>
+<tr><td>Jan–Feb 2025</td><td>3.0 Amphoreus: exposition, puzzles, MOC difficulty (CN-led)</td><td><span class="pill neg">Mixed–negative</span></td></tr>
+<tr><td>Feb 2025</td><td>Developer Radio 3.0 response + buff program</td><td><span class="pill pos">Positive</span></td></tr>
+<tr><td>Jul 2025</td><td>Fate collab phase 1 (3.4)</td><td><span class="pill pos">Strongly positive</span></td></tr>
+<tr><td>Late 2025</td><td>3.x fatigue; "disappointing phase" framing appears in press</td><td><span class="pill neg">Negative drift</span></td></tr>
+<tr><td>Feb 2026</td><td>4.0 reveal — event-reduction fears</td><td><span class="pill neg">Negative</span></td></tr>
+<tr><td>Feb–Mar 2026</td><td>4.0 launch — tone and generosity praised</td><td><span class="pill pos">Positive reversal</span></td></tr>
+<tr><td>Jun–Jul 2026</td><td>4.3 Blade patch; 4.4 reveal and launch (Himeko Nova, Fate phase 2)</td><td><span class="pill pos">Positive</span></td></tr>
+</tbody></table></div>
+
+<h3>Recurring themes by frequency</h3>
+<p><span class="pill pos">Consistently positive</span>&nbsp; QoL delivery speed · free-unit generosity · music and production quality · short daily loop · story highs (2.2, Amphoreus finale beats, 4.0 tone).</p>
+<p><span class="pill neg">Consistently negative</span>&nbsp; powercreep / HP inflation (highest-frequency complaint since mid-2024) · four-star irrelevance · support dependency raising team cost · mid-patch droughts · endgame tuning as pull pressure.</p>
+<p><span class="pill mix">Mixed / situational</span>&nbsp; story pacing (peaked negative at 3.0, recovered at 4.0) · minigames-vs-events tradeoff (active since 4.0) · banner stacking density (raised again for 4.4).</p>
+<p class="dim"><strong>Sustained feature requests:</strong> older-character buffs (partially answered) · broader skip options (partially answered) · four-star endgame viability · loaner/trial systems for endgame · more non-combat use for large rosters.</p>
+</section>
+
+<section id="s6" class="reveal">
+<div class="sec-tag">06 / PLAYER FEEDBACK SUMMARY</div>
+<h2>Categorized concerns, impact, and urgency</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Category</th><th>Main concerns</th><th>Impact</th><th>Urgency</th><th>Suggested action</th></tr></thead>
+<tbody>
+<tr><td class="hl">Combat / Balance</td><td>HP inflation; old limiteds falling off; support dependency</td><td class="sev-high">High</td><td class="sev-high">High</td><td>Buff program on a visible schedule; publish tuning intent</td></tr>
+<tr><td class="hl">Characters</td><td>Alt fatigue in 4.x; four-star neglect</td><td class="sev-med">Med-high</td><td class="sev-med">Medium</td><td>Space alts; commit to endgame-viable four-stars</td></tr>
+<tr><td class="hl">Story</td><td>Exposition density (3.x); recovered in 4.x</td><td class="sev-med">Medium ↗</td><td class="sev-low">Low-med</td><td>Keep skip/recap tooling; hold 4.0 pacing</td></tr>
+<tr><td class="hl">Events</td><td>Fewer traditional events since 4.0; minigame debate</td><td class="sev-med">Medium</td><td class="sev-med">Medium</td><td>Track minigame completion data; restore 1–2 combat events per version</td></tr>
+<tr><td class="hl">Economy</td><td>Banner stacking (4.4); anniversary expectation lock-in</td><td class="sev-med">Med-high</td><td class="sev-med">Medium</td><td>Keep cross-version windows; protect the generosity floor</td></tr>
+<tr><td class="hl">Progression / Relics</td><td>Substat RNG; stat-check pressure</td><td class="sev-med">Medium</td><td class="sev-low">Low-med</td><td>Continue crafting/reroll QoL</td></tr>
+<tr><td class="hl">Endgame</td><td>MOC spikes read as monetization pressure</td><td class="sev-high">High (spikes)</td><td class="sev-high">High</td><td>Tune difficulty to trail banners; widen viable-team space</td></tr>
+<tr><td class="hl">Performance</td><td>Minor; device heat in dense 4.x zones</td><td class="sev-low">Low</td><td class="sev-low">Low</td><td>Standard optimization passes</td></tr>
+<tr><td class="hl">UI</td><td>Menu depth at 100+ characters</td><td class="sev-low">Low-med</td><td class="sev-low">Low</td><td>Loadout presets; roster filtering</td></tr>
+<tr><td class="hl">QoL</td><td>Largely positive; sweep requests continue</td><td class="sev-low">Positive driver</td><td class="sev-low">Low</td><td>Maintain cadence — QoL is brand equity</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="s7" class="reveal">
+<div class="sec-tag">07 / COMPETITIVE ANALYSIS</div>
+<h2>June 2026 market position</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Title</th><th>Jun 2026 (mobile est.)</th><th>Trend</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td class="hl">Love and Deepspace</td><td>#1 overall</td><td>Stable</td><td>Different segment (romance)</td></tr>
+<tr><td class="hl">Wuthering Waves</td><td><span class="amt">$34.0M</span> · #2</td><td>▲ from $31.8M</td><td>Edgerunners collab surge; first month beating all HoYoverse titles; #1 gacha on PC worldwide (early 2026)</td></tr>
+<tr><td class="hl">Genshin Impact</td><td><span class="amt">$32.3M</span> · #3</td><td>▼ from $41.7M</td><td>Larger installed base; slower QoL reputation</td></tr>
+<tr><td class="hl">Honkai: Star Rail</td><td><span class="amt">$28.5M</span> · #4</td><td>▼ from $38.8M</td><td>Pre-collab lull; 4.4 tentpole lands in July</td></tr>
+<tr><td class="hl">Zenless Zone Zero</td><td><span class="amt">$9.7M</span> · #17</td><td>Flat–down</td><td>Feb 2026 low of $13M despite new faction launch</td></tr>
+</tbody></table></div>
+
+<h3>System comparison</h3>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Dimension</th><th>HSR</th><th>Genshin</th><th>ZZZ</th><th>WuWa</th><th>P5X</th></tr></thead>
+<tbody>
+<tr><td class="hl">Combat</td><td>Turn-based; lowest skill floor</td><td>Action, open world</td><td>Action, combo/parry</td><td>Action; highest ceiling</td><td>Turn-based (Persona)</td></tr>
+<tr><td class="hl">Daily time</td><td>5–10 min — best in class</td><td>Longer</td><td>Short</td><td>Short-med</td><td>Short</td></tr>
+<tr><td class="hl">QoL reputation</td><td>Fast, responsive</td><td>Slow, chronic complaint</td><td>Good</td><td>Very good — Kuro's brand</td><td>Average</td></tr>
+<tr><td class="hl">Buffs old units</td><td>Announced program (2025)</td><td>Historically avoided</td><td>N/A (young)</td><td>Yes, shipped</td><td>Limited</td></tr>
+<tr><td class="hl">Cadence</td><td>6 wks, never slipped</td><td>~6 wks</td><td>6 wks</td><td>~6 wks</td><td>4–5 wks</td></tr>
+<tr><td class="hl">Collab strategy</td><td>Fate annual tentpole</td><td>Rare, cautious</td><td>Some</td><td>Aggressive (Cyberpunk) — moved revenue</td><td>Persona IP is the draw</td></tr>
+<tr><td class="hl">Generosity</td><td>High (free 5★ precedent)</td><td>Low-med</td><td>Med-high</td><td>High</td><td>Medium</td></tr>
+<tr><td class="hl">Endgame</td><td>3 modes + roguelikes + Currency Wars</td><td>Abyss + theater</td><td>Tower-style</td><td>Tower + holograms</td><td>Ladders</td></tr>
+</tbody></table></div>
+
+<h3>Best practices worth importing</h3>
+<p><strong>Kuro's feedback-response branding.</strong> Wuthering Waves converted "we listen" into a durable identity and revenue growth. HSR has the machinery (Developer Radio) but uses it reactively at crisis points; Kuro uses it continuously.</p>
+<p><strong>Collab as acquisition, not just monetization.</strong> The Edgerunners collab pulled lapsed and new players, not only spend from existing ones. HSR's Fate phases should be measured on reactivation — and the Fortnite discovery experiment in 4.0 is the right instinct.</p>
+<p><strong>Genshin as the cautionary case.</strong> HSR's early QoL advantage was built explicitly against Genshin's slowness. Reputations calcify — the "generous and responsive" brand is an asset that erodes quietly if powercreep discourse hardens.</p>
+</section>
+
+<section id="s8" class="reveal">
+<div class="sec-tag">08 / OPERATIONAL RISK ASSESSMENT</div>
+<h2>Ranked risks with evidence and mitigation</h2>
+<div class="tbl-wrap"><table>
+<thead><tr><th>Risk</th><th>Severity</th><th>Business impact</th><th>Evidence</th><th>Mitigation</th></tr></thead>
+<tbody>
+<tr><td class="hl">Powercreep → veteran trust erosion</td><td class="sev-high">HIGH</td><td>Churn of highest-LTV segment; pull hesitancy suppresses banner revenue</td><td>Continuous CN+EN discourse since mid-2024; usage sheets as proof; buff program forced as response</td><td>Buffs on a published schedule; cap enemy stat growth per cycle; state tuning philosophy openly</td></tr>
+<tr><td class="hl">Player-base contraction</td><td class="sev-high">HIGH</td><td>MAU 30.1M → ~11.5M (Feb 2025 → mid-2025); smaller funnel per banner</td><td>Tracker data</td><td>Reactivation around collab phases; returning-player express track</td></tr>
+<tr><td class="hl">Competitive displacement</td><td class="sev-med">MED-HIGH</td><td>First month outearned by WuWa (Jun 2026); WuWa #1 on PC</td><td>GachaRevenue / AppMagic; PC rankings</td><td>Compete on HSR's moats — story, time-respect, accessibility — not action spectacle</td></tr>
+<tr><td class="hl">Endgame tuning as monetization signal</td><td class="sev-med">MED-HIGH</td><td>Difficulty spikes timed with banners read as coercion; direct trust damage</td><td>3.0 MOC backlash</td><td>Decouple: new endgame clearable by prior-cycle rosters</td></tr>
+<tr><td class="hl">Banner stacking / spend fatigue</td><td class="sev-med">MEDIUM</td><td>Wallet-splitting in 4.4 (three limiteds); mid-spender resentment</td><td>Pull-planning discourse</td><td>Keep cross-version windows and selectors; don't stack a new alt with collab phases again</td></tr>
+<tr><td class="hl">Content pacing (drought vs. minigame fatigue)</td><td class="sev-med">MEDIUM</td><td>Session decay between resets; casual drift</td><td>Pre-4.0 complaints; ongoing minigame debate</td><td>Data-check minigame completion; one combat event per phase</td></tr>
+<tr><td class="hl">Anniversary expectation lock-in</td><td class="sev-med">MEDIUM</td><td>Each anniversary judged against the last; "normal" reads as a cut</td><td>Free 5★ precedent (1.6, anniversaries)</td><td>Never reduce the floor; vary the shape, not the size</td></tr>
+<tr><td class="hl">Alt strategy dilution</td><td class="sev-med">MEDIUM</td><td>Launch-character alts risk "roster reruns" perception</td><td>4.x alt density; community commentary</td><td>Ration alts; anchor each version family on new characters</td></tr>
+<tr><td class="hl">Technical stability</td><td class="sev-low">LOW</td><td>No major outage history</td><td>39 months of on-time delivery</td><td>Maintain current process</td></tr>
+<tr><td class="hl">ZZZ precedent (portfolio pressure)</td><td class="sev-low">LOW-MED</td><td>Shows HoYo titles can slide fast; raises internal expectations on HSR</td><td>ZZZ at $9.7M in June</td><td>Not HSR-controllable; planning context</td></tr>
+</tbody></table></div>
+</section>
+<section id="s9" class="reveal">
+<div class="sec-tag">09 / STRATEGIC RECOMMENDATIONS</div>
+<h2>Prioritized actions</h2>
+
+<div class="rec"><span class="prio p0">P0</span><h4>Rebuild meta trust (powercreep)</h4>
+<p>Publish the older-character buff program as a standing roadmap item with named units per version, the way banners are announced. The 2025 announcement bought goodwill; silence spends it. Pair with a stated ceiling on endgame stat growth per version family.</p>
+<p class="ev">EVIDENCE — highest-frequency negative theme for two years; proven positive response when addressed (Feb 2025).</p></div>
+
+<div class="rec"><span class="prio p0">P0</span><h4>Protect the endgame / monetization boundary</h4>
+<p>Set an internal rule that new endgame resets must be fully clearable by a defined set of prior-cycle teams, validated against community usage data before ship. Every major sentiment crisis since 2024 traces to this boundary.</p>
+<p class="ev">EVIDENCE — 3.0 MOC backlash; CN-led pull-pressure discourse.</p></div>
+
+<div class="rec"><span class="prio p1">P1</span><h4>Build the returning-player express track</h4>
+<p>MAU contraction plus collab tentpoles equals a reactivation opportunity: compressed story recap, loaner endgame units, catch-up jade bundle, surfaced at Fate phases and anniversaries. Measure Fate phase 2 (live now) on reactivated accounts, not just revenue.</p>
+<p class="ev">EVIDENCE — MAU decline; WuWa demonstrating collab-driven acquisition.</p></div>
+
+<div class="rec"><span class="prio p1">P1</span><h4>Keep the 4.0 formula, patch its gaps</h4>
+<p>The tone shift, generosity, and time-respect of 4.0 recovered sentiment — hold that. Return one combat-focused event per phase alongside minigames, and instrument minigame skip/completion rates to settle the events-vs-minigames debate with data.</p>
+<p class="ev">EVIDENCE — 4.0 reception reversal; ongoing minigame debate.</p></div>
+
+<div class="rec"><span class="prio p2">P2</span><h4>Ration alts, space spending peaks</h4>
+<p>After 4.4, avoid pairing a new alt with a collab phase in the same version. Extend the cross-version banner window and selector patterns — both well received — as the standard for stacked patches.</p>
+<p class="ev">EVIDENCE — banner-density discourse around 4.4.</p></div>
+
+<div class="rec"><span class="prio p2">P2</span><h4>Make responsiveness continuous, not crisis-driven</h4>
+<p>Move Developer Radio to a fixed per-version cadence with a short "you said → we did" section every patch. This converts existing behavior into brand identity, directly countering Kuro's strongest differentiator.</p>
+<p class="ev">EVIDENCE — positive reception of every feedback response shipped; Kuro's growth on that identity.</p></div>
+
+<div class="rec"><span class="prio p3">P3</span><h4>Four-star program</h4>
+<p>Commit to at least one endgame-relevant four-star per version family. Low cost, high goodwill, directly reduces support-dependency resentment.</p>
+<p class="ev">EVIDENCE — sustained feature-request volume.</p></div>
+</section>
+
+<section id="s10" class="reveal" style="border-bottom:none">
+<div class="sec-tag">10 / REFERENCES</div>
+<h2>Sources</h2>
+
+<div class="ref-group">Revenue, downloads &amp; player counts</div>
+<ol class="refs">
+<li><b>Game World Observer</b> — first-day mobile revenue ($6.3M), 20M downloads, 30M+ pre-registrations (May 2, 2023). <a href="https://gameworldobserver.com/2023/05/02/honkai-star-rail-revenue-launch-day-genshin-impact-compared">gameworldobserver.com/2023/05/02/…</a></li>
+<li><b>Game World Observer</b> — $130M+ first month; RpD by region (May 26, 2023). <a href="https://gameworldobserver.com/2023/05/26/honkai-star-rail-revenue-132-million-first-month-mobile">gameworldobserver.com/2023/05/26/…</a></li>
+<li><b>GamerBraves</b> — first-month revenue chart via AppMagic (May 2023). <a href="https://www.gamerbraves.com/honkai-star-rail-has-been-out-for-a-month-heres-how-successful-its-been-in-mobile-revenue/">gamerbraves.com/…first-month-revenue</a></li>
+<li><b>Game World Observer</b> — $500M at three months; regional splits; miHoYo portfolio share (Aug 9, 2023). <a href="https://gameworldobserver.com/2023/08/09/honkai-star-rail-revenue-500-million-mobile-mihoyo">gameworldobserver.com/2023/08/09/…</a></li>
+<li><b>PocketGamer.biz</b> — $1B (Jan 14, 2024) and $2B (Mar 23, 2025) dates; regional shares; May 2023 peak month (Mar 25, 2025). <a href="https://www.pocketgamer.biz/honkai-star-rail-rockets-past-2bn-on-mobile-in-under-two-years/">pocketgamer.biz/…2bn-on-mobile</a></li>
+<li><b>CoopBoardGames</b> — 30.1M MAU (Feb 2025, official), 18.1M (Jan 2024); 2024 revenue $870.9M vs Genshin $730.1M; 100M+ downloads (Apr 2026). <a href="https://coopboardgames.com/online-gaming/honkai-star-rail/">coopboardgames.com/…honkai-star-rail</a></li>
+<li><b>Quantumrun</b> — 2023 revenue ~$840M; DAU peak 3.33M (Aug 2024); mid-2025 MAU ~11.5M; May 2023 peak $209.1M (Mar 2026). <a href="https://www.quantumrun.com/consulting/honkai-star-rail/">quantumrun.com/…honkai-star-rail</a></li>
+</ol>
+
+<div class="ref-group">June 2026 market &amp; competitive data</div>
+<ol class="refs" style="counter-reset:r 7">
+<li><b>ixbt.games</b> — June 2026 rankings: WuWa $34M, Genshin $32.33M, HSR $28.46M (May $38.77M), ZZZ $9.66M (Jul 5, 2026). <a href="https://ixbt.games/en/news/2026/07/05/nazvany-samye-pribylnye-gaca-igry-iiunia-2026-wuthering-waves-operezaet-genshin-impact-hsr-i-zzz.html">ixbt.games/en/news/2026/07/05/…</a></li>
+<li><b>OtakuKart</b> — WuWa #2 in June 2026; Edgerunners collab context; Love and Deepspace #1 (Jul 2026). <a href="https://otakukart.com/wuthering-waves-ranks-no-2-in-june-2026-gacha-revenue-surpassing-every-hoyoverse-game-for-the-first-time/">otakukart.com/…no-2-in-june-2026</a></li>
+<li><b>OtakuKart</b> — June 2026 rankings detail. <a href="https://otakukart.com/wuthering-waves-beats-genshin-impact-honkai-star-rail-and-zenless-zone-zero-in-june-2026-gacha-revenue-rankings/">otakukart.com/…june-2026-rankings</a></li>
+<li><b>ixbt.games</b> — February 2026 rankings: ZZZ $13.18M, WuWa $46M (Mar 3, 2026). <a href="https://ixbt.games/en/news/2026/03/03/nazvany-samye-pribylnye-gaca-igry-fevralia-2026-u-genshin-impact-upali-doxody-no-ona-smogla-pomesat-wuthering-waves-vozglavit-cart.html">ixbt.games/en/news/2026/03/03/…</a></li>
+<li><b>Pocket Tactics</b> — ZZZ February 2026 revenue analysis (Mar 2026). <a href="https://www.pockettactics.com/zenless-zone-zero/february-profit">pockettactics.com/zenless-zone-zero/february-profit</a></li>
+<li><b>Stix (@ByteStix), X</b> — WuWa #1 gacha on PC worldwide; PC rankings for Genshin, HSR, ZZZ (Mar 2026). <a href="https://x.com/ByteStix/status/2033190830706512162">x.com/ByteStix/status/2033190830706512162</a></li>
+</ol>
+
+<div class="ref-group">Version 4.x coverage &amp; reception</div>
+<ol class="refs" style="counter-reset:r 13">
+<li><b>GameSpot</b> — "We Were All Wrong About Honkai Star Rail 4.0": reveal concerns vs post-launch reversal; "disappointing 3.X phase" (Feb 27, 2026). <a href="https://www.gamespot.com/articles/we-were-all-wrong-about-honkai-star-rail-4-0/1100-6538481/">gamespot.com/articles/…4-0</a></li>
+<li><b>MMORPG.com</b> — 4.0 impressions: minigame integration, divisiveness, Sparxie / Yao Guang, Path of Elation (Feb 2026). <a href="https://www.mmorpg.com/editorials/honkai-star-rail-40-impressions-planarcadia-is-the-weirdest-and-most-imaginative-update-yet-2000137322">mmorpg.com/editorials/…planarcadia</a></li>
+<li><b>mp1st</b> — 4.0 review: level 110 cap, Currency Wars expanded difficulty, generosity notes (Feb 2026). <a href="https://mp1st.com/news/honkai-star-rail-version-4-0-preview-welcome-to-planarcadia">mp1st.com/news/…welcome-to-planarcadia</a></li>
+<li><b>Final Weapon</b> — 4.0 impressions: Planarcadia tone, post-Amphoreus recalibration (Feb 12, 2026). <a href="https://finalweapon.net/2026/02/12/honkai-star-rail-version-4-0-impressions-planarcadia-awaits/">finalweapon.net/2026/02/12/…</a></li>
+<li><b>Breach.gg</b> — 4.0 as live-service arena: Phantasmoon Games, Fortnite creator-ecosystem tie-in (Feb 13, 2026). <a href="https://breach.gg/blog/honkai-star-rail-weekly-2026-02-13">breach.gg/blog/honkai-star-rail-weekly-2026-02-13</a></li>
+<li><b>The Otaku's Study</b> — 4.3 "The Lethe Below the Living": Jun 1 date, Blade storyline, challenge-mode changes (May 2026). <a href="https://www.otakustudy.com/video-game/2026/05/honkai-star-rail-version-4-3-to-kick-off-new-planarcadia-adventures-on-1-june/">otakustudy.com/…version-4-3</a></li>
+<li><b>RPGamer</b> — 4.4 set for Jul 15: title, Himeko Nova, Fate phase 2 (Rin, Gilgamesh), reruns (Jul 2026). <a href="https://rpgamer.com/2026/07/honkai-star-rail-4-4-update-set-for-july-15/">rpgamer.com/2026/07/…4-4-update</a></li>
+<li><b>Gematsu</b> — 4.4 "In Ravages Does the Whistle Sound": story setup, collab phase 2 (Jul 2026). <a href="https://www.gematsu.com/2026/07/honkai-star-rail-version-4-4-update-in-ravages-does-the-whistle-sound-launches-july-15">gematsu.com/2026/07/…launches-july-15</a></li>
+<li><b>Siliconera</b> — 4.4 dates and banner windows; collab banners until 4.6 (Jul 2026). <a href="https://www.siliconera.com/4-4-honkai-star-rail-update-brings-back-fate-stay-night-in-july/">siliconera.com/…fate-stay-night-in-july</a></li>
+<li><b>Sportskeeda</b> — 4.4 livestream summary: Quick Level Up, achievement instant claim, banner phases (Jul 2026). <a href="https://www.sportskeeda.com/esports/honkai-star-rail-hsr-4-4-livestream-summary-release-date-banners-events-everything-new">sportskeeda.com/esports/…4-4-livestream-summary</a></li>
+<li><b>Sportskeeda</b> — 4.4 patch notes overview: event windows, Fate event detail (Jul 2026). <a href="https://www.sportskeeda.com/esports/honkai-star-rail-hsr-4-4-update-patch-notes-new-characters-fate-collab">sportskeeda.com/esports/…4-4-update-patch-notes</a></li>
+<li><b>GenshinBuilds</b> — 4.4 maintenance window and banner schedule (Jul 2026). <a href="https://genshin-builds.com/en/hsr/blog/honkai-star-rail-4-4-release-date-himeko-nova-banner-details">genshin-builds.com/en/hsr/blog/…4-4-release-date</a></li>
+</ol>
+
+<div class="ref-group">Feedback-response record &amp; community sentiment</div>
+<ol class="refs" style="counter-reset:r 25">
+<li><b>Sportskeeda</b> — Developer Radio 3.0 Special Edition: lore-skip feature, puzzle simplification (2025). <a href="https://sportskeeda.com/esports/honkai-star-rail-developers-respond-version-3-0-amphoreus-feedback">sportskeeda.com/esports/…3-0-amphoreus-feedback</a></li>
+<li><b>Sportskeeda</b> — community reaction to Trailblaze Power cap increase (Developer Radio vol. 2, v1.3) (2023). <a href="https://sportskeeda.com/esports/the-trailblaze-power-increase-something-genshin-players-can-dream-of-honkai-star-rail-community-reacts-increase-trailblaze-power-cap">sportskeeda.com/esports/…trailblaze-power-increase</a></li>
+<li><b>Sportskeeda</b> — Genshin community reaction to the free Dr. Ratio announcement (v1.6) (2023). <a href="https://sportskeeda.com/esports/genshin-impact-fans-furious-hoyoverse-announces-free-5-star-character-honkai-star-rail">sportskeeda.com/esports/…free-5-star-character</a></li>
+<li><b>The Magic Rain</b> — "HSR Has A Powercreep Problem": 3.0 MOC frustration EN+CN, HomDGCat data, buff announcement (Feb 2025). <a href="https://themagicrain.com/2025/02/kopi-talk-honkai-star-rail-has-a-powercreep-problem/">themagicrain.com/2025/02/…powercreep-problem</a></li>
+<li><b>HSR Fandom (user blog)</b> — player-perspective powercreep account, launch through 3.x. <a href="https://honkai-star-rail.fandom.com/wiki/User_blog:AkiviliKaslana/Star_Rail's_powercreep_is_a_genuine_problem_(rant)">honkai-star-rail.fandom.com/wiki/User_blog:…</a></li>
+</ol>
+
+<div class="callout" style="margin-top:32px"><span class="label">Data notes</span>Revenue trackers (AppMagic, Sensor Tower, GachaRevenue) estimate mobile IAP only; PC and PlayStation revenue is not publicly tracked, so all comparisons understate absolute totals — particularly for PC-heavy HoYoverse audiences. CN Android figures are modeled from iOS multipliers. MAU/DAU after Feb 2025 are tracker estimates, not official. References 6, 7, 29, and 30 are secondary or community sources, corroborated by primary tracker reporting or clearly attributed as community perspective. Judgments marked as assessments are the author's.</div>
+
+<footer>ASTRAL · LIVE-SERVICE INTELLIGENCE — HONKAI: STAR RAIL v1.0–v4.4 · PREPARED JUL 22 2026 · MOBILE FIGURES ONLY UNLESS NOTED</footer>
+</section>
+
+</main>
+</div>
+
+<script>
+// starfield — quiet, respects reduced motion
+(function(){
+  const c=document.getElementById('stars'),x=c.getContext('2d');
+  const rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let stars=[],W,H;
+  function size(){W=c.width=innerWidth;H=c.height=innerHeight;
+    stars=Array.from({length:Math.min(160,W*H/9000)},()=>({
+      px:Math.random()*W,py:Math.random()*H,r:Math.random()*1.1+.2,
+      a:Math.random()*.5+.15,tw:Math.random()*Math.PI*2,
+      hue:Math.random()<.18?'75,159,232':(Math.random()<.14?'243,197,107':'230,236,251')
+    }));}
+  size();addEventListener('resize',size);
+  function draw(t){
+    x.clearRect(0,0,W,H);
+    for(const s of stars){
+      const f=rm?1:(.65+.35*Math.sin(t/1400+s.tw));
+      x.beginPath();x.arc(s.px,s.py,s.r,0,7);
+      x.fillStyle='rgba('+s.hue+','+(s.a*f)+')';x.fill();
+    }
+    if(!rm)requestAnimationFrame(draw);
+  }
+  rm?draw(0):requestAnimationFrame(draw);
+})();
+
+// scroll-spy for route nav + section reveals
+(function(){
+  const links=[...document.querySelectorAll('#routeList li')];
+  const secs=[...document.querySelectorAll('main section')];
+  const spy=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        links.forEach(l=>l.classList.remove('active'));
+        const l=links.find(l=>l.querySelector('a').getAttribute('href')==='#'+e.target.id);
+        if(l)l.classList.add('active');
+      }
+    });
+  },{rootMargin:'-35% 0px -55% 0px'});
+  secs.forEach(s=>spy.observe(s));
+  const rev=new IntersectionObserver(es=>{
+    es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');rev.unobserve(e.target);}});
+  },{threshold:.06});
+  document.querySelectorAll('.reveal').forEach(el=>rev.observe(el));
+})();
+</script>
+</body>
+</html>
